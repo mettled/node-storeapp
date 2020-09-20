@@ -1,0 +1,13 @@
+doctype html
+html
+  include includes/head
+
+  body
+    include includes/navbar
+
+    .container
+      block content
+        h2= message
+        a(href="about") About
+
+    include includes/footer
