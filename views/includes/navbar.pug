@@ -1,6 +1,6 @@
 nav
   .nav-wrapper
-    a.brand-logo(href="#") Courses APP
+    a.brand-logo(href="/") Courses APP
     ul.right.hide-on-med-and-down#nav-mobile
       li(class= active==='index' ? 'active' : null)
         a(href="/") Main
@@ -8,4 +8,5 @@ nav
         a(href="/courses") Course
       li(class= active==='add' ? 'active' : null)
         a(href="/add") Course Add
-
+      li(class= active==='cart' ? 'active' : null)
+        a(href="/cart") Cart

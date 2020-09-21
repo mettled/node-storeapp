@@ -1,0 +1,33 @@
+extends index.pug
+
+mixin item(courseCount, { name, price, img })
+  tr
+    td= name
+    td= courseCount
+    td= price
+    td
+      button.btn.btm-primary Delete
+
+block content
+  h4 Cart
+
+  - const length = Object.keys(courses).length
+  if length === 0
+    p Cart is empty
+  else
+    table
+      thead
+        tr
+          td Name
+          td Count
+          td Price per a pcs
+          td Actions
+      tbody
+        each course in courses
+          - const [id, c] = course;
+          - const courseCount = count[id]
+          +item(courseCount, c)
+    
+    p
+      strong Price: 
+      span.price= price

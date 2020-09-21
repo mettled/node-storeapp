@@ -1,4 +1,6 @@
 import Router from 'express';
+import Course from '../models/course.js';
+
 
 const router = Router();
 
@@ -10,14 +12,10 @@ router.get('/', function (req, res) {
 });
 
 router.post('/', function (req, res) {
-  const { body } = req;
-  
-  console.log(body)
+  const { name, price, img } = req.body;
+  const course = new Course(name, price, img);
+  course.save(course);
   res.redirect('/courses');
-  // res.render('add', {
-  //   title: 'Add courses',
-  //   active: 'add',
-  // });
 });
 
 

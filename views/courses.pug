@@ -1,4 +1,28 @@
 extends index.pug
 
+
+mixin item(id, { name, price, img})
+  .row
+    .col.s6.offset-s3
+      .card
+        .card-image
+          img(src= img)
+        .card-content
+          span.card-title #{name}
+          p.price= price
+        .card-action.actions
+          a(href=`/courses/${id}` target='_blank') Open course
+          a(href=`/courses/edit/${id}?allow=true`) Edit course
+          form(action="cart/add" method="POST")
+            input(type="hidden" name='id' value= id)
+            button.btn.btn-primary(type="submit") Add to cart
+
 block content
   h4 Courses
+  
+  if courses.length === 0
+    p No courses
+  else
+    each course in courses
+      - const [id, c] = course;
+      +item(id, c)
