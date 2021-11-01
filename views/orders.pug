@@ -1,0 +1,26 @@
+extends index.pug
+
+block content
+  h4 My orders
+
+  if orders.length === 0
+    p No orders
+  else
+    each order in orders
+      .row
+        .col.s6.offset-s3
+          .card
+            .card-content
+              span.card-title Order #{order._id}
+              p.date #{order.date}
+              p
+                em #{order.userID.name}
+                |    (#{order.userID.email})
+              
+              ol
+                each course in order.courses
+                  li #{course.courseID.name} (  <strong>x  #{course.count} </strong>)
+              hr
+
+              p Price: 
+                span.price #{order.price}

@@ -1,47 +1,75 @@
 import Router from 'express';
 import Course from '../models/course.js';
+import auth from '../middleware/auth.js';
 
 const router = Router();
 
 router.get('/', async (req, res) => {
-  const allCourses = await Course.getAll();
-  const courses = Object.entries(allCourses);
-  res.render('courses', {
-    title: 'Courses',
-    active: 'courses',
-    courses,
-  });
+
+  try {
+    const courses = await Course.find({}).populate('userID', 'email name');
+    res.render('courses', {
+      title: 'Courses',
+      active: 'courses',
+      courses,
+    });   
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-  const course = await Course.getCourseById(id);
-  res.render('course', {
-    title: `Course ${course.name}`,
-    ...course,
-  });
+  try {
+    const { id } = req.params;
+    const course = await Course.findById(id).lean();
+    res.render('course', {
+      title: `Course ${course.name}`,
+      id,
+      ...course,
+    });  
+  } catch (error) {
+    console.log(error);    
+  }
 });
 
-router.get('/edit/:id', async (req, res) => {
+router.get('/edit/:id', auth, async (req, res) => {
   const { allow } = req.query;
   if (allow !== 'true') {
     return res.redirect('/');
   }
 
-  const { id } = req.params;
-  const course = await Course.getCourseById(id);
-  res.render('course-edit', {
-    title: `Course ${course.name}`,
-    id,
-    ...course,
-  });
+  try {
+    const { id } = req.params;
+    const course = await Course.findById(id).lean();
+    res.render('course-edit', {
+      title: `Course ${course.name}`,
+      id,
+      ...course,
+  });  
+  } catch (error) {
+    console.log(error);
+  }
+
 });
 
-router.post('/edit/:id', async (req, res) => {
-  await Course.update(req.body);
-  res.redirect('/courses');
+router.post('/edit/:id', auth, async (req, res) => {
+  try {
+    const { id, name, img, price } = req.body;
+    await Course.findByIdAndUpdate(id, { name, img, price });
+    res.redirect('/courses');    
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-
+router.post('/delete', auth, async (req, res) => {
+  try {
+    const { id } = req.body;
+    await Course.deleteOne({ _id: id });
+    res.redirect('/courses');   
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 export default router;

@@ -1,33 +1,37 @@
 extends index.pug
 
-mixin item(courseCount, { name, price, img })
+mixin item(count, { name, price, img, _id: id })
   tr
     td= name
-    td= courseCount
+    td= count
     td= price
     td
-      button.btn.btm-primary Delete
+      button.btn.btn-primary.js-remove(data-id= id data-csrf= csrf) Delete
 
 block content
-  h4 Cart
+  .cart
+    h4 Cart
 
-  - const length = Object.keys(courses).length
-  if length === 0
-    p Cart is empty
-  else
-    table
-      thead
-        tr
-          td Name
-          td Count
-          td Price per a pcs
-          td Actions
-      tbody
-        each course in courses
-          - const [id, c] = course;
-          - const courseCount = count[id]
-          +item(courseCount, c)
-    
-    p
-      strong Price: 
-      span.price= price
+    - const length = Object.keys(courses).length
+    if length === 0
+      p Cart is empty
+    else
+      table
+        thead
+          tr
+            td Name
+            td Count
+            td Price per a pcs
+            td Actions
+        tbody
+          each course in courses
+            - const { count, courseID } = course;
+            +item(count, courseID)
+      
+      p
+        strong Price: 
+        span.price= price
+
+      form(action="/orders", method="post")
+        input(type="hidden" name="_csrf" value= csrf)
+        button.btn.btn-primary(type="submit") Order

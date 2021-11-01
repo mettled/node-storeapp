@@ -24,7 +24,11 @@ block content
       input.validate#img(type="text" name="img" required value= img)
       label(for="img") Course image
       span.helper-text(data-error="Enter Course URL image")
-
+    input(type="hidden" name="_csrf" value= csrf)
     input(type="hidden" name="id" value= id)
 
     button.btn.btn-primary(type="submit") Edit course
+  form.form-delete(action=`/courses/delete` method="POST")
+    input(type="hidden" name="_csrf" value= csrf)
+    input(type="hidden" name="id" value= id)
+    button.btn.red(type="submit") Delete course

@@ -6,7 +6,15 @@ nav
         a(href="/") Main
       li(class= active==='courses' ? 'active' : null)
         a(href="/courses") Course
-      li(class= active==='add' ? 'active' : null)
-        a(href="/add") Course Add
-      li(class= active==='cart' ? 'active' : null)
-        a(href="/cart") Cart
+      if isAuth
+        li(class= active==='add' ? 'active' : null)
+          a(href="/add") Course Add
+        li(class= active==='cart' ? 'active' : null)
+          a(href="/cart") Cart
+        li(class= active==='orders' ? 'active' : null)
+          a(href="/orders") My orders
+        li
+          a(href="/auth/logout") Logout
+      else
+        li(class= active==='auth' ? 'active' : null)
+          a(href="/auth") Login/Register        

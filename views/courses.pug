@@ -1,7 +1,7 @@
 extends index.pug
 
 
-mixin item(id, { name, price, img})
+mixin item({ _id: id, name, price, img})
   .row
     .col.s6.offset-s3
       .card
@@ -12,10 +12,12 @@ mixin item(id, { name, price, img})
           p.price= price
         .card-action.actions
           a(href=`/courses/${id}` target='_blank') Open course
-          a(href=`/courses/edit/${id}?allow=true`) Edit course
-          form(action="cart/add" method="POST")
-            input(type="hidden" name='id' value= id)
-            button.btn.btn-primary(type="submit") Add to cart
+          if isAuth
+            a(href=`/courses/edit/${id}?allow=true`) Edit course
+            form(action="cart/add" method="POST")
+              input(type="hidden" name="_csrf" value= csrf)
+              input(type="hidden" name='id' value= id)
+              button.btn.btn-primary(type="submit") Add to cart
 
 block content
   h4 Courses
@@ -24,5 +26,4 @@ block content
     p No courses
   else
     each course in courses
-      - const [id, c] = course;
-      +item(id, c)
+      +item(course)
